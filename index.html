@@ -1,0 +1,951 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8"/>
+<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate"/>
+<meta http-equiv="Pragma" content="no-cache"/>
+<meta http-equiv="Expires" content="0"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate"/>
+<meta http-equiv="Pragma" content="no-cache"/>
+<meta http-equiv="Expires" content="0"/>
+<title>مساعد الرياضيات — الرابعة متوسط</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=IBM+Plex+Mono:wght@400;500&family=Cairo:wght@300;400;600;700;900&display=swap" rel="stylesheet"/>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.css"/>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/contrib/auto-render.min.js"></script>
+<script src="https://unpkg.com/mathlive@0.101.1/dist/mathlive.min.js"></script>
+<style>
+:root {
+  --ink:     #0d1117;
+  --deep:    #111827;
+  --surface: #1a2332;
+  --card:    #1e2d3d;
+  --border:  #263548;
+  --borderhi:#2e4460;
+  --gold:    #e8b84b;
+  --goldD:   #b8892a;
+  --goldL:   #f5d080;
+  --teal:    #38d9c0;
+  --tealD:   #1fa990;
+  --red:     #f05252;
+  --purple:  #a78bfa;
+  --text:    #d4e0ef;
+  --muted:   #6b86a0;
+  --faint:   #2e4460;
+}
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  background: var(--ink);
+  color: var(--text);
+  font-family: 'Cairo', sans-serif;
+  min-height: 100vh;
+  direction: rtl;
+  overflow-x: hidden;
+}
+body::before {
+  content: '';
+  position: fixed; inset: 0; z-index: 0; pointer-events: none;
+  background:
+    radial-gradient(circle at 20% 20%, rgba(232,184,75,.06) 0%, transparent 50%),
+    radial-gradient(circle at 80% 80%, rgba(56,217,192,.04) 0%, transparent 50%);
+}
+.page {
+  position: relative; z-index: 1;
+  max-width: 900px; margin: 0 auto;
+  padding: 36px 18px 80px;
+}
+
+/* ── header ── */
+.header { text-align: center; margin-bottom: 36px; }
+.ornament { display: flex; align-items: center; justify-content: center; gap: 14px; margin-bottom: 14px; }
+.ol  { height: 1px; width: 50px; background: linear-gradient(90deg, transparent, var(--gold)); }
+.ol.r { background: linear-gradient(90deg, var(--gold), transparent); }
+.od  { width: 9px; height: 9px; background: var(--gold); transform: rotate(45deg); box-shadow: 0 0 10px rgba(232,184,75,.5); }
+.hsub  { font-family: 'IBM Plex Mono', monospace; font-size: .65rem; letter-spacing: .2em; text-transform: uppercase; color: var(--gold); margin-bottom: 8px; }
+.htitle { font-family: 'Amiri', serif; font-size: clamp(1.8rem,5vw,2.8rem); font-weight: 700; color: #fff; line-height: 1.2; margin-bottom: 6px; }
+.htitle span { color: var(--gold); }
+.hdesc { color: var(--muted); font-size: .88rem; font-weight: 300; }
+
+/* ── usage bar ── */
+.ubar {
+  background: var(--surface); border: 1px solid var(--border);
+  border-radius: 12px; padding: 12px 18px; margin-bottom: 18px;
+  display: flex; align-items: center; gap: 12px; flex-wrap: wrap;
+}
+.utrack { flex: 1; min-width: 100px; background: var(--deep); border-radius: 100px; height: 7px; overflow: hidden; }
+.ufill  { height: 100%; border-radius: 100px; transition: width .6s ease; background: linear-gradient(90deg, var(--teal), var(--gold)); }
+.ufill.warn   { background: linear-gradient(90deg, var(--gold), #fb923c); }
+.ufill.danger { background: linear-gradient(90deg, #fb923c, var(--red)); }
+.utext { font-family: 'IBM Plex Mono', monospace; font-size: .7rem; }
+.uval  { font-weight: 600; color: var(--gold); }
+.ulim  { color: var(--muted); }
+.umsg  { font-size: .76rem; white-space: nowrap; }
+.umsg.ok     { color: var(--teal); }
+.umsg.warn   { color: #fb923c; }
+.umsg.danger { color: var(--red); }
+
+/* ── search card ── */
+.scard {
+  background: var(--surface); border: 1px solid var(--border);
+  border-radius: 16px; padding: 24px; margin-bottom: 20px;
+  position: relative; overflow: hidden;
+}
+.scard::before {
+  content: ''; position: absolute; top: 0; right: 0; left: 0; height: 2px;
+  background: linear-gradient(90deg, transparent, var(--gold), var(--teal), transparent);
+}
+.slabel {
+  font-size: .7rem; letter-spacing: .1em; text-transform: uppercase;
+  color: var(--gold); font-family: 'IBM Plex Mono', monospace;
+  margin-bottom: 10px; display: block;
+}
+.sinput-wrap { position: relative; margin-bottom: 14px; }
+.sinput {
+  width: 100%; background: var(--deep); border: 1px solid var(--border);
+  border-radius: 12px; color: var(--text);
+  font-family: 'Cairo', sans-serif; font-size: 1rem;
+  padding: 14px 18px 14px 52px;
+  outline: none; transition: border-color .2s, box-shadow .2s;
+  direction: rtl; resize: none; min-height: 56px; line-height: 1.6;
+}
+.sinput:focus { border-color: var(--goldD); box-shadow: 0 0 0 3px rgba(232,184,75,.1); }
+.sinput::placeholder { color: var(--muted); }
+.sicon {
+  position: absolute; left: 16px; top: 50%; transform: translateY(-50%);
+  color: var(--muted); font-size: 1rem; pointer-events: none;
+}
+
+/* ── tabs ── */
+.modesec  { margin-bottom: 12px; }
+.modetitle {
+  font-size: .66rem; font-family: 'IBM Plex Mono', monospace;
+  color: var(--muted); letter-spacing: .08em; text-transform: uppercase;
+  margin-bottom: 7px;
+}
+.tabs { display: flex; gap: 7px; flex-wrap: wrap; }
+.tab {
+  padding: 6px 13px; border-radius: 8px;
+  border: 1px solid var(--border); background: var(--deep);
+  color: var(--muted); font-family: 'Cairo', sans-serif;
+  font-size: .8rem; cursor: pointer; transition: all .2s; white-space: nowrap;
+}
+.tab:hover { border-color: var(--borderhi); color: var(--text); }
+.tab.ag { border-color: var(--goldD); background: rgba(232,184,75,.1); color: var(--gold); }
+.tab.at { border-color: var(--tealD); background: rgba(56,217,192,.1); color: var(--teal); }
+
+/* ── options row ── */
+.opts { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; margin-bottom: 14px; }
+.olbl { font-size: .68rem; color: var(--muted); font-family: 'IBM Plex Mono', monospace; }
+.sw { position: relative; }
+select {
+  appearance: none; background: var(--deep); border: 1px solid var(--border);
+  border-radius: 8px; color: var(--text);
+  font-family: 'Cairo', sans-serif; font-size: .78rem;
+  padding: 6px 26px 6px 10px; outline: none; cursor: pointer; direction: rtl;
+}
+select:focus { border-color: var(--goldD); }
+.sa {
+  position: absolute; left: 8px; top: 50%; transform: translateY(-50%);
+  pointer-events: none; color: var(--muted); font-size: .66rem;
+}
+.nin {
+  width: 56px; background: var(--deep); border: 1px solid var(--border);
+  border-radius: 8px; color: var(--text);
+  font-family: 'IBM Plex Mono', monospace; font-size: .82rem;
+  padding: 6px 8px; outline: none; text-align: center;
+}
+
+/* ── buttons ── */
+.btnrow { display: flex; gap: 10px; align-items: stretch; }
+.sbtn {
+  flex: 1; background: linear-gradient(135deg, var(--goldD), var(--gold));
+  border: none; border-radius: 12px; color: #1a0e00;
+  font-family: 'Cairo', sans-serif; font-weight: 700; font-size: .95rem;
+  padding: 13px; cursor: pointer; transition: all .2s;
+  display: flex; align-items: center; justify-content: center; gap: 8px;
+}
+.sbtn:hover { filter: brightness(1.1); box-shadow: 0 4px 20px rgba(232,184,75,.25); }
+.sbtn:disabled { opacity: .45; cursor: not-allowed; filter: none; box-shadow: none; }
+.cbtn {
+  background: rgba(240,82,82,.1); border: 1px solid rgba(240,82,82,.3);
+  color: var(--red); font-family: 'Cairo', sans-serif; font-weight: 600;
+  font-size: .88rem; padding: 13px 18px; border-radius: 12px;
+  cursor: pointer; transition: all .2s;
+  display: none; align-items: center; gap: 6px; white-space: nowrap;
+}
+.cbtn:hover { background: rgba(240,82,82,.2); border-color: var(--red); }
+.cbtn.on { display: flex; }
+
+/* ── spinner ── */
+@keyframes spin { to { transform: rotate(360deg); } }
+.spinner {
+  width: 16px; height: 16px; border-radius: 50%;
+  border: 2px solid rgba(0,0,0,.2); border-top-color: #1a0e00;
+  animation: spin .6s linear infinite; display: none;
+}
+.spinner.on { display: block; }
+
+/* ── status ── */
+.status {
+  display: none; align-items: center; gap: 8px;
+  font-family: 'IBM Plex Mono', monospace; font-size: .75rem;
+  padding: 9px 13px; border-radius: 8px; margin-bottom: 16px;
+}
+.status.ok  { display: flex; background: rgba(56,217,192,.07); border: 1px solid rgba(56,217,192,.2); color: var(--teal); }
+.status.err { display: flex; background: rgba(240,82,82,.07);  border: 1px solid rgba(240,82,82,.2);  color: var(--red); }
+.sdot { width: 6px; height: 6px; border-radius: 50%; flex-shrink: 0; }
+.status.ok  .sdot { background: var(--teal); }
+.status.err .sdot { background: var(--red); }
+
+/* ── answer card ── */
+.ans-card {
+  background: var(--card); border: 1px solid var(--border);
+  border-radius: 14px; padding: 22px; margin-bottom: 18px;
+  position: relative; overflow: hidden;
+}
+.ans-card::before {
+  content: ''; position: absolute; top: 0; right: 0; bottom: 0; width: 3px;
+  background: linear-gradient(var(--gold), var(--teal));
+}
+.ans-hdr { display: flex; align-items: center; gap: 10px; margin-bottom: 14px; }
+.ans-ico {
+  width: 30px; height: 30px; border-radius: 8px;
+  background: linear-gradient(135deg, var(--goldD), var(--gold));
+  display: flex; align-items: center; justify-content: center;
+  font-size: .85rem; flex-shrink: 0;
+}
+.ans-ttl { font-family: 'Amiri', serif; font-size: 1rem; color: var(--gold); font-weight: 700; }
+.ans-mode {
+  font-family: 'IBM Plex Mono', monospace; font-size: .62rem; color: var(--muted);
+  margin-right: auto; background: var(--surface);
+  border: 1px solid var(--border); border-radius: 100px; padding: 2px 8px;
+}
+.ans-body {
+  font-size: .95rem; line-height: 2; color: var(--text);
+  font-weight: 300; white-space: pre-wrap; word-break: break-word; min-height: 30px;
+}
+@keyframes blink { 0%,100% { opacity:1; } 50% { opacity:0; } }
+.cursor {
+  display: inline-block; width: 2px; height: 1em;
+  background: var(--gold); animation: blink .8s step-end infinite;
+  vertical-align: text-bottom; margin-right: 1px;
+}
+
+/* ── token bar ── */
+.tbar {
+  display: none; align-items: center; gap: 12px; flex-wrap: wrap;
+  margin-top: 12px; padding-top: 12px; border-top: 1px solid var(--border);
+}
+.tbar.on { display: flex; }
+.tstat   { display: flex; flex-direction: column; align-items: center; gap: 1px; }
+.tval    { font-family: 'IBM Plex Mono', monospace; font-size: .95rem; font-weight: 600; color: var(--gold); }
+.tlbl    { font-family: 'IBM Plex Mono', monospace; font-size: .58rem; color: var(--muted); text-transform: uppercase; letter-spacing: .05em; }
+.tsep    { width: 1px; height: 28px; background: var(--border); }
+
+/* ── results ── */
+.res-hdr { display: flex; align-items: center; gap: 10px; margin-bottom: 14px; }
+.res-ttl { font-family: 'Amiri', serif; font-size: 1.05rem; color: var(--muted); font-weight: 700; }
+.res-cnt { font-family: 'IBM Plex Mono', monospace; font-size: .68rem; color: var(--muted); background: var(--surface); border: 1px solid var(--border); border-radius: 100px; padding: 2px 8px; }
+.res-time { font-family: 'IBM Plex Mono', monospace; font-size: .64rem; color: var(--faint); margin-right: auto; }
+
+@keyframes slideIn { from { opacity:0; transform:translateY(10px); } to { opacity:1; transform:translateY(0); } }
+.rcard {
+  background: var(--card); border: 1px solid var(--border);
+  border-radius: 12px; padding: 16px 18px; margin-bottom: 11px;
+  transition: border-color .2s, transform .15s;
+  animation: slideIn .3s ease both;
+  position: relative; overflow: hidden;
+}
+.rcard:hover { border-color: var(--borderhi); transform: translateY(-1px); }
+.rcard::before { content: ''; position: absolute; top: 0; right: 0; bottom: 0; width: 3px; }
+.rcard.type-definition::before { background: var(--teal); }
+.rcard.type-formula::before    { background: var(--gold); }
+.rcard.type-exercise::before   { background: var(--purple); }
+.rcard.type-lesson::before     { background: #60a5fa; }
+.rcard.type-note::before       { background: #fb923c; }
+.rcard.type-example::before    { background: #34d399; }
+
+.rtop    { display: flex; align-items: flex-start; justify-content: space-between; gap: 10px; margin-bottom: 9px; }
+.rtitle  { font-family: 'Amiri', serif; font-size: .98rem; font-weight: 700; color: #fff; line-height: 1.5; flex: 1; }
+.rscore  { font-family: 'IBM Plex Mono', monospace; font-size: .68rem; font-weight: 600; border-radius: 6px; padding: 3px 7px; white-space: nowrap; flex-shrink: 0; }
+.rbadges { display: flex; gap: 5px; flex-wrap: wrap; margin-bottom: 9px; }
+.badge   { font-size: .64rem; font-family: 'IBM Plex Mono', monospace; padding: 2px 8px; border-radius: 100px; border: 1px solid; white-space: nowrap; }
+.bt-definition { color: var(--teal);   border-color: rgba(56,217,192,.3);  background: rgba(56,217,192,.08); }
+.bt-formula    { color: var(--gold);   border-color: rgba(232,184,75,.3);  background: rgba(232,184,75,.08); }
+.bt-exercise   { color: var(--purple); border-color: rgba(167,139,250,.3); background: rgba(167,139,250,.08); }
+.bt-lesson     { color: #60a5fa;       border-color: rgba(96,165,250,.3);  background: rgba(96,165,250,.08); }
+.bt-note       { color: #fb923c;       border-color: rgba(251,146,60,.3);  background: rgba(251,146,60,.08); }
+.bt-example    { color: #34d399;       border-color: rgba(52,211,153,.3);  background: rgba(52,211,153,.08); }
+.bt-chapter    { color: var(--muted);  border-color: var(--border);        background: var(--surface); }
+
+.rcontent { font-size: .85rem; color: var(--text); line-height: 1.8; font-weight: 300; max-height: 95px; overflow: hidden; position: relative; transition: max-height .4s; }
+.rcontent.exp { max-height: 800px; }
+.rcontent::after { content: ''; position: absolute; bottom: 0; left: 0; right: 0; height: 32px; background: linear-gradient(transparent, var(--card)); transition: opacity .3s; pointer-events: none; }
+.rcontent.exp::after { opacity: 0; }
+.expbtn { background: none; border: none; cursor: pointer; color: var(--gold); font-family: 'Cairo', sans-serif; font-size: .76rem; padding: 4px 0; margin-top: 3px; display: flex; align-items: center; gap: 3px; }
+.expbtn:hover { color: var(--goldL); }
+.rkw { display: flex; gap: 4px; flex-wrap: wrap; margin-top: 9px; padding-top: 9px; border-top: 1px solid var(--border); }
+.kw  { font-size: .66rem; font-family: 'IBM Plex Mono', monospace; color: var(--muted); background: var(--surface); border: 1px solid var(--border); border-radius: 4px; padding: 1px 6px; }
+.empty     { text-align: center; padding: 48px 20px; color: var(--muted); }
+.empty-ico { font-size: 2.6rem; margin-bottom: 12px; opacity: .35; }
+.divider   { border: none; border-top: 1px solid var(--border); margin: 20px 0; }
+.footer    { text-align: center; padding-top: 14px; font-family: 'IBM Plex Mono', monospace; font-size: .61rem; color: var(--faint); }
+
+@media (max-width: 560px) {
+  .scard { padding: 16px 14px; }
+  .rcard { padding: 14px; }
+  .tabs  { gap: 5px; }
+  .tab   { font-size: .74rem; padding: 5px 9px; }
+  .btnrow { flex-direction: column; }
+  .cbtn.on { width: 100%; justify-content: center; }
+}
+</style>
+</head>
+<body>
+<div class="page">
+
+  <header class="header">
+    <div class="ornament"><div class="ol"></div><div class="od"></div><div class="ol r"></div></div>
+    <div class="hsub">4AM Mathematics · RAG + DeepSeek + MathLive</div>
+    <h1 class="htitle">ExamFlow مساعد <span>الرياضيات</span></h1>
+    <p class="hdesc">ذكاء اصطناعي · محرر معادلات · تصحيح تلقائي</p>
+  </header>
+
+  <!-- شريط الاستهلاك -->
+  <div class="ubar">
+    <div>
+      <div class="utext"><span class="uval" id="utok">--</span><span class="ulim"> / 12,000 token</span></div>
+      <div class="utext" style="margin-top:2px"><span class="uval" id="ureq">--</span><span class="ulim"> / 10 طلبات</span></div>
+    </div>
+    <div class="utrack"><div class="ufill" id="ufill" style="width:0%"></div></div>
+    <div class="umsg ok" id="umsg">جارٍ التحميل...</div>
+  </div>
+
+  <!-- التبويبات -->
+  <div class="mtabs">
+    <button class="mtab active-rag"  id="tab_rag"  onclick="switchTab('rag')">🤖 مساعد RAG</button>
+    <button class="mtab"             id="tab_edit" onclick="switchTab('edit')">✏️ محرر الأستاذ</button>
+    <button class="mtab"             id="tab_ans"  onclick="switchTab('ans')">📝 إجابة الطالب</button>
+  </div>
+
+  <!-- ══ تبويب 1: RAG ══ -->
+  <div class="mpanel on" id="panel_rag">
+    <div class="scard">
+      <label class="slabel">اكتب سؤالك</label>
+      <div class="sinput-wrap">
+        <textarea class="sinput" id="qi" rows="2"
+          placeholder="مثال: ما هو القاسم المشترك الأكبر لعددين طبيعيين؟"></textarea>
+        <span class="sicon">🔍</span>
+      </div>
+      <div class="modesec">
+        <div class="modetitle">وضع الإجابة</div>
+        <div class="tabs" id="amtabs">
+          <button class="tab ag" id="am_direct">⚡ مباشرة</button>
+          <button class="tab"    id="am_sourced">📚 مع المصادر</button>
+          <button class="tab"    id="am_step">📝 خطوة بخطوة</button>
+        </div>
+      </div>
+      <div class="modesec">
+        <div class="modetitle">وضع البحث</div>
+        <div class="tabs" id="smtabs">
+          <button class="tab at" id="sm_hybrid">🔗 هجين</button>
+          <button class="tab"    id="sm_dense">🧠 دلالي</button>
+          <button class="tab"    id="sm_sparse">🔑 كلمات</button>
+        </div>
+      </div>
+      <div class="opts">
+        <span class="olbl">النوع:</span>
+        <div class="sw">
+          <select id="ft">
+            <option value="">الكل</option>
+            <option value="definition">تعريف</option>
+            <option value="formula">قاعدة</option>
+            <option value="exercise">تمرين</option>
+            <option value="lesson">درس</option>
+            <option value="example">مثال</option>
+            <option value="note">ملاحظة</option>
+          </select><span class="sa">▾</span>
+        </div>
+        <span class="olbl">النتائج:</span>
+        <input class="nin" id="lim" type="number" value="5" min="1" max="10"/>
+      </div>
+      <div class="btnrow">
+        <button class="sbtn" id="sbtn">
+          <div class="spinner" id="spin"></div>
+          <span id="btnlbl">🤖 اسأل DeepSeek</span>
+        </button>
+        <button class="cbtn" id="cbtn">✕ إلغاء</button>
+      </div>
+    </div>
+    <div class="status" id="st"><div class="sdot"></div><span id="stmsg"></span></div>
+    <div id="area"></div>
+  </div>
+
+  <!-- ══ تبويب 2: محرر الأستاذ ══ -->
+  <div class="mpanel" id="panel_edit">
+    <div class="scard">
+      <label class="slabel">✏️ محرر معادلات الأستاذ</label>
+      <p style="font-size:.85rem;color:var(--muted);margin-bottom:14px;">
+        اكتب المعادلة بشكل مرئي — يُولَّد LaTeX تلقائياً للحفظ في قاعدة البيانات.
+      </p>
+      <div class="ml-toolbar">
+        <span class="ml-chip" onclick="mlInsert('teacher','\\frac{■}{■}')">a/b</span>
+        <span class="ml-chip" onclick="mlInsert('teacher','\\sqrt{■}')">√x</span>
+        <span class="ml-chip" onclick="mlInsert('teacher','■^{■}')">xⁿ</span>
+        <span class="ml-chip" onclick="mlInsert('teacher','■_{■}')">xₙ</span>
+        <span class="ml-chip" onclick="mlInsert('teacher','\\neq')">≠</span>
+        <span class="ml-chip" onclick="mlInsert('teacher','\\leq')">≤</span>
+        <span class="ml-chip" onclick="mlInsert('teacher','\\geq')">≥</span>
+        <span class="ml-chip" onclick="mlInsert('teacher','\\times')">×</span>
+        <span class="ml-chip" onclick="mlInsert('teacher','\\div')">÷</span>
+        <span class="ml-chip" onclick="mlInsert('teacher','\\sqrt[3]{■}')">∛</span>
+        <span class="ml-chip" onclick="mlInsert('teacher','\\pi')">π</span>
+      </div>
+      <math-field id="teacher" virtual-keyboard-mode="onfocus" style="min-height:60px;">x^2 + 3x - 4 = 0</math-field>
+      <div class="two-col" style="margin-top:12px;">
+        <div>
+          <div class="col-lbl">LaTeX (للحفظ)</div>
+          <div class="ml-out" id="teacher-latex">x^2 + 3x - 4 = 0</div>
+        </div>
+        <div>
+          <div class="col-lbl">معاينة</div>
+          <div class="ml-preview" id="teacher-preview"></div>
+        </div>
+      </div>
+      <div class="btnrow" style="margin-top:14px;">
+        <button class="sbtn" style="background:linear-gradient(135deg,var(--tealD),var(--teal));" onclick="copyLatex()">📋 نسخ LaTeX</button>
+        <button class="cbtn" style="display:flex;" onclick="clearTeacher()">مسح</button>
+      </div>
+      <div id="copy-msg" style="font-size:.8rem;color:var(--teal);margin-top:8px;display:none;">✓ تم النسخ!</div>
+    </div>
+  </div>
+
+  <!-- ══ تبويب 3: إجابة الطالب ══ -->
+  <div class="mpanel" id="panel_ans">
+    <div class="scard">
+      <label class="slabel">📝 تصحيح إجابة الطالب</label>
+      <div style="background:var(--bg);border:1px solid var(--border);border-radius:10px;padding:14px 16px;margin-bottom:16px;">
+        <div class="col-lbl" style="margin-bottom:8px;">نص السؤال</div>
+        <textarea class="arabic-in" id="q-text" rows="2" placeholder="مثال: أوجد حل المعادلة التالية:"></textarea>
+        <div class="col-lbl" style="margin:10px 0 6px;">المعادلة (اختياري)</div>
+        <math-field id="q-formula" virtual-keyboard-mode="onfocus" style="min-height:50px;margin-bottom:0;">x^2 + 3x - 4 = 0</math-field>
+      </div>
+      <div style="margin-bottom:14px;">
+        <div class="col-lbl">الإجابة الصحيحة (الأستاذ)</div>
+        <math-field id="correct-ans" virtual-keyboard-mode="onfocus" style="min-height:50px;">x=1 \text{ أو } x=-4</math-field>
+      </div>
+      <div style="margin-bottom:14px;">
+        <div class="col-lbl">إجابة الطالب</div>
+        <math-field id="student-ans" virtual-keyboard-mode="onfocus" style="min-height:50px;" placeholder="يكتب الطالب إجابته هنا..."></math-field>
+      </div>
+      <div class="btnrow">
+        <button class="sbtn" style="background:linear-gradient(135deg,#7c5ce4,var(--purple));" onclick="checkStudentAns()">✓ تصحيح تلقائي</button>
+        <button class="cbtn" style="display:flex;" onclick="askDeepSeekCheck()">🤖 تصحيح بـ DeepSeek</button>
+      </div>
+      <div id="ans-result" style="margin-top:14px;"></div>
+    </div>
+  </div>
+
+  <footer class="footer">مساعد الرياضيات · الرابعة متوسط · PHP + Jina + Qdrant + DeepSeek</footer>
+</div>
+
+<script>
+"use strict";
+// غيّر هذا المسار إذا غيّرت اسم أو موقع ملف rag.php
+var API_BASE = './rag.php';
+
+// ══ نظام التبويبات ════════════════════════════════════
+function switchTab(name) {
+  var tabs   = ['rag','edit','ans'];
+  var colors = {rag:'rag', edit:'edit', ans:'ans'};
+  tabs.forEach(function(t) {
+    var btn = g('tab_'+t), panel = g('panel_'+t);
+    if (btn)   btn.className   = 'mtab' + (t===name ? ' active-'+colors[t] : '');
+    if (panel) panel.className = 'mpanel' + (t===name ? ' on' : '');
+  });
+}
+
+// ══ MathLive helpers ══════════════════════════════════
+function mlInsert(fieldId, latex) {
+  var mf = g(fieldId);
+  if (mf && mf.executeCommand) {
+    mf.executeCommand(['insert', latex]);
+    mf.focus();
+  }
+}
+
+function mlPreview(fieldId, previewId) {
+  var mf = g(fieldId);
+  var pv = g(previewId);
+  if (!mf || !pv) return;
+  var latex = mf.getValue('latex');
+  if (window.MathLive && MathLive.convertLatexToMarkup) {
+    pv.innerHTML = MathLive.convertLatexToMarkup(latex);
+  } else {
+    pv.textContent = latex;
+  }
+}
+
+function copyLatex() {
+  var mf = g('teacher');
+  if (!mf) return;
+  var latex = mf.getValue('latex');
+  navigator.clipboard.writeText(latex).then(function() {
+    var msg = g('copy-msg');
+    if (msg) { msg.style.display='block'; setTimeout(function(){ msg.style.display='none'; }, 2000); }
+  });
+}
+
+function clearTeacher() {
+  var mf = g('teacher');
+  if (mf) { mf.setValue(''); mf.focus(); }
+}
+
+// تصحيح محلي بسيط (مقارنة LaTeX)
+function checkStudentAns() {
+  var sa = g('student-ans');
+  var ca = g('correct-ans');
+  var res = g('ans-result');
+  if (!sa || !ca || !res) return;
+  var student = sa.getValue('latex').replace(/\s/g,'');
+  var correct = ca.getValue('latex').replace(/\s/g,'');
+  var match = student === correct || student.includes(correct.split('\\')[0]);
+  res.innerHTML = match
+    ? "<div class='result-pill pill-ok'>✓ إجابة صحيحة!</div>"
+    : "<div class='result-pill pill-err'>✗ الإجابة غير مطابقة — LaTeX الطالب: <code style=\'font-size:.76rem\'>" + student + "</code></div>";
+}
+
+// تصحيح بـ DeepSeek
+function askDeepSeekCheck() {
+  var qt  = g('q-text')   ? g('q-text').value.trim()        : '';
+  var qf  = g('q-formula')? g('q-formula').getValue('latex') : '';
+  var ca  = g('correct-ans')  ? g('correct-ans').getValue('latex')  : '';
+  var sa  = g('student-ans')  ? g('student-ans').getValue('latex')  : '';
+  var res = g('ans-result');
+  if (!sa) { if(res) res.innerHTML = "<div class='result-pill pill-hint'>⚠ الطالب لم يكتب إجابة بعد.</div>"; return; }
+  if(res) res.innerHTML = "<div class='result-pill pill-hint'>⏳ جارٍ التصحيح بـ DeepSeek...</div>";
+  var body = {
+    query: 'صحّح إجابة الطالب:\n'
+          + 'السؤال: ' + qt + (qf ? ' $'+qf+'$' : '') + '\n'
+          + 'الإجابة الصحيحة: $' + ca + '$\n'
+          + 'إجابة الطالب: $' + sa + '$\n'
+          + 'هل الإجابة صحيحة؟ وضّح بشكل مختصر.',
+    limit: 3,
+    answer_mode: 'direct',
+    search_mode: 'hybrid'
+  };
+  fetch(API_BASE + '?action=ask', { method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify(body) })
+  .then(function(r){ return r.body.getReader(); })
+  .then(function(reader){
+    var dec=new TextDecoder(), buf='', txt='';
+    function read(){ return reader.read().then(function(res){
+      if(res.done){ if(g('ans-result')) g('ans-result').innerHTML="<div class='result-pill pill-ok' style='display:block;padding:12px'>"+txt+"</div>"; return; }
+      buf+=dec.decode(res.value,{stream:true});
+      var lines=buf.split('\n'); buf=lines.pop();
+      for(var i=0;i<lines.length;i++){
+        var line=lines[i]; if(line.indexOf('data: ')!==0) continue;
+        var raw=line.slice(6); if(raw==='[DONE]') continue;
+        try{ var d=JSON.parse(raw); if(d.type==='token') txt+=d.text; }catch(e){}
+      }
+      return read();
+    }); }
+    return read();
+  })
+  .catch(function(e){ if(g('ans-result')) g('ans-result').innerHTML="<div class='result-pill pill-err'>خطأ: "+e.message+"</div>"; });
+}
+
+// ══ تهيئة MathLive عند التحميل ════════════════════════
+window.addEventListener('load', function() {
+  var tmf = g('teacher');
+  if (tmf) {
+    tmf.addEventListener('input', function() {
+      var latex = tmf.getValue('latex');
+      if(g('teacher-latex')) g('teacher-latex').textContent = latex || '--';
+      mlPreview('teacher','teacher-preview');
+    });
+    mlPreview('teacher','teacher-preview');
+  }
+});
+
+
+// ── KaTeX math rendering ──────────────────────────────
+function renderMath(el) {
+  if (typeof renderMathInElement === "undefined") {
+    console.warn("KaTeX not loaded yet, retrying...");
+    setTimeout(function() { renderMath(el); }, 500);
+    return;
+  }
+  try {
+    renderMathInElement(el, {
+      delimiters: [
+        { left: "$$",   right: "$$",   display: true  },
+        { left: "$",    right: "$",    display: false },
+        { left: "\\[", right: "\\]", display: true  },
+        { left: "\\(", right: "\\)", display: false }
+      ],
+      throwOnError: false,
+      errorColor: "#f05252",
+      output: "html"
+    });
+    // wrap display blocks in styled box
+    el.querySelectorAll(".katex-display").forEach(function(d) {
+      if (!d.parentElement || d.parentElement.className !== "math-block") {
+        var wrap = document.createElement("div");
+        wrap.className = "math-block";
+        d.parentNode.insertBefore(wrap, d);
+        wrap.appendChild(d);
+      }
+    });
+  } catch(e) { console.warn("KaTeX error:", e); }
+}
+
+// ── Wrap loose numbers/signs in LTR spans (for text not in LaTeX) ──
+function fixLooseNumbers(el) {
+  // matches negative numbers, decimals, simple expressions like -9, 3.5, -2x
+  var rx = /(-?\d+([.,]\d+)?(\s*[+\-×÷=<>]\s*-?\d+([.,]\d+)?)*)/g;
+  var walker = document.createTreeWalker(el, NodeFilter.SHOW_TEXT, null, false);
+  var nodes = [];
+  var n;
+  while (n = walker.nextNode()) {
+    // skip text already inside KaTeX
+    if (n.parentElement && n.parentElement.closest(".katex")) continue;
+    if (rx.test(n.nodeValue)) nodes.push(n);
+  }
+  nodes.forEach(function(node) {
+    var frag = document.createElement("span");
+    frag.innerHTML = node.nodeValue.replace(rx, function(m) {
+      return "<span class='ltr-num'>" + m + "</span>";
+    });
+    node.parentNode.replaceChild(frag, node);
+  });
+}
+
+var TL = {
+  definition: "تعريف", formula: "قاعدة", exercise: "تمرين",
+  lesson: "درس", example: "مثال", note: "ملاحظة"
+};
+var ML = {
+  direct: "إجابة مباشرة", sourced: "مع المصادر", stepbystep: "خطوة بخطوة"
+};
+
+var ansMode   = "direct";
+var srchMode  = "hybrid";
+var abortCtrl = null;
+
+// ── getElementById shorthand ─────────────────────────
+function g(id) { return document.getElementById(id); }
+
+// ── Tab buttons ──────────────────────────────────────
+var ansModemap = {
+  am_direct:  "direct",
+  am_sourced: "sourced",
+  am_step:    "stepbystep"
+};
+var srchModemap = {
+  sm_hybrid: "hybrid",
+  sm_dense:  "dense",
+  sm_sparse: "sparse"
+};
+
+Object.keys(ansModemap).forEach(function(id) {
+  g(id).addEventListener("click", function() {
+    ansMode = ansModemap[id];
+    document.querySelectorAll("#amtabs .tab").forEach(function(t) { t.className = "tab"; });
+    g(id).className = "tab ag";
+  });
+});
+
+Object.keys(srchModemap).forEach(function(id) {
+  g(id).addEventListener("click", function() {
+    srchMode = srchModemap[id];
+    document.querySelectorAll("#smtabs .tab").forEach(function(t) { t.className = "tab"; });
+    g(id).className = "tab at";
+  });
+});
+
+// ── Enter key ────────────────────────────────────────
+g("qi").addEventListener("keydown", function(e) {
+  if (e.key === "Enter" && !e.shiftKey) { e.preventDefault(); doAsk(); }
+});
+
+// ── Main buttons ─────────────────────────────────────
+g("sbtn").addEventListener("click", doAsk);
+g("cbtn").addEventListener("click", cancelAsk);
+
+// ── Usage bar ────────────────────────────────────────
+function updateUsage(u) {
+  if (!u) return;
+  var pct = u.tokens_pct || 0;
+  g("utok").textContent = u.tokens_used.toLocaleString();
+  g("ureq").textContent = u.requests_used;
+  var f = g("ufill");
+  f.style.width = Math.min(pct, 100) + "%";
+  f.className = "ufill" + (pct >= 100 ? " danger" : pct >= 80 ? " warn" : "");
+  var m = g("umsg");
+  if (u.exceeded) {
+    m.className = "umsg danger";
+    m.textContent = "انتهى الحد اليومي — يعود غداً";
+    g("sbtn").disabled = true;
+    g("btnlbl").textContent = "انتهى الحد";
+  } else if (pct >= 80) {
+    m.className = "umsg warn";
+    m.textContent = "تبقى " + u.tokens_left.toLocaleString() + " token (" + u.requests_left + " طلب)";
+  } else {
+    m.className = "umsg ok";
+    m.textContent = "✓ تبقى " + u.tokens_left.toLocaleString() + " token (" + u.requests_left + " طلب)";
+  }
+}
+
+function loadUsage() {
+  fetch(API_BASE + "?action=usage")
+    .then(function(r) { return r.json(); })
+    .then(updateUsage)
+    .catch(function() {});
+}
+loadUsage();
+
+// ── Status ────────────────────────────────────────────
+function showSt(type, msg) {
+  g("st").className = "status " + type;
+  g("stmsg").textContent = msg;
+}
+function hideSt() { g("st").className = "status"; }
+
+// ── Loading state ─────────────────────────────────────
+function setLoad(on) {
+  g("sbtn").disabled = on;
+  g("spin").className = on ? "spinner on" : "spinner";
+  g("btnlbl").textContent = on ? "جارٍ التفكير..." : "🤖 اسأل DeepSeek";
+  g("cbtn").className = on ? "cbtn on" : "cbtn";
+}
+
+// ── Cancel ────────────────────────────────────────────
+function cancelAsk() {
+  if (abortCtrl) { abortCtrl.abort(); abortCtrl = null; }
+  setLoad(false);
+  showSt("err", "تم إلغاء الطلب.");
+}
+
+// ── Escape HTML ───────────────────────────────────────
+function esc(s) {
+  return String(s)
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;");
+}
+
+// ── Toggle expand ─────────────────────────────────────
+function toggleExp(i) {
+  var el  = g("rc" + i);
+  var btn = g("eb" + i);
+  var ex  = el.classList.toggle("exp");
+  btn.innerHTML = ex ? "إخفاء ▴" : "عرض المزيد ▾";
+}
+
+// ── Main ask function ─────────────────────────────────
+function doAsk() {
+  var query = g("qi").value.trim();
+  if (!query) { showSt("err", "الرجاء كتابة سؤال."); return; }
+
+  var ft  = g("ft").value;
+  var lim = parseInt(g("lim").value) || 5;
+
+  hideSt();
+  setLoad(true);
+  g("area").innerHTML = "";
+
+  var body = {
+    query:       query,
+    limit:       lim,
+    answer_mode: ansMode,
+    search_mode: srchMode
+  };
+  if (ft) body.filter_type = ft;
+
+  // Build answer card HTML
+  var area = g("area");
+  var cardHTML =
+    "<div class='ans-card' id='ansCard'>" +
+      "<div class='ans-hdr'>" +
+        "<div class='ans-ico'>🤖</div>" +
+        "<div class='ans-ttl'>إجابة DeepSeek</div>" +
+        "<div class='ans-mode'>" + (ML[ansMode] || ansMode) + "</div>" +
+      "</div>" +
+      "<div class='ans-body' id='ansBody'><span class='cursor'></span></div>" +
+      "<div class='tbar' id='tbar'>" +
+        "<div class='tstat'><div class='tval' id='tp'>--</div><div class='tlbl'>Prompt</div></div>" +
+        "<div class='tsep'></div>" +
+        "<div class='tstat'><div class='tval' id='tc'>--</div><div class='tlbl'>Completion</div></div>" +
+        "<div class='tsep'></div>" +
+        "<div class='tstat'><div class='tval' id='tt'>--</div><div class='tlbl'>Total</div></div>" +
+        "<div class='tsep'></div>" +
+        "<div class='tstat'><div class='tval' id='tca'>--</div><div class='tlbl'>Cached</div></div>" +
+      "</div>" +
+    "</div>" +
+    "<div class='divider'></div>" +
+    "<div id='resArea'></div>";
+
+  area.innerHTML = cardHTML;
+
+  var ansBody  = g("ansBody");
+  var ansText  = "";
+  var answered = false;
+
+  abortCtrl = new AbortController();
+
+  fetch(API_BASE + "?action=ask", {
+    method:  "POST",
+    headers: { "Content-Type": "application/json" },
+    body:    JSON.stringify(body),
+    signal:  abortCtrl.signal
+  })
+  .then(function(resp) {
+    if (resp.status === 429) {
+      return resp.json().then(function(err) {
+        var d = (err && err.detail) ? err.detail : {};
+        if (d.usage) updateUsage(d.usage);
+        showSt("err", d.message || "انتهى الحد اليومي.");
+        var ac = g("ansCard"); if (ac) ac.remove();
+        setLoad(false);
+      });
+    }
+    if (!resp.ok) throw new Error("HTTP " + resp.status);
+
+    var reader  = resp.body.getReader();
+    var decoder = new TextDecoder();
+    var buf     = "";
+
+    function readChunk() {
+      return reader.read().then(function(result) {
+        if (result.done) {
+          ansBody.textContent = ansText;
+          renderMath(ansBody);
+          fixLooseNumbers(ansBody);
+          abortCtrl = null;
+          setLoad(false);
+          return;
+        }
+
+        buf += decoder.decode(result.value, { stream: true });
+        var lines = buf.split("\n");
+        buf = lines.pop();
+
+        for (var i = 0; i < lines.length; i++) {
+          var line = lines[i];
+          if (line.indexOf("data: ") !== 0) continue;
+          var raw = line.slice(6);
+          if (raw === "[DONE]") continue;
+          try {
+            var d = JSON.parse(raw);
+            if (d.type === "meta") {
+              renderResults(d.results, d.search_mode, g("resArea"));
+              showSt("ok",
+                d.count + " نتيجة · " +
+                (ML[d.answer_mode] || d.answer_mode) + " · " +
+                d.search_mode
+              );
+            } else if (d.type === "token") {
+              answered = true;
+              ansText += d.text;
+              ansBody.textContent = ansText;
+            } else if (d.type === "usage") {
+              var u = d.usage || {};
+              g("tp").textContent  = (u.prompt_tokens         || 0).toLocaleString();
+              g("tc").textContent  = (u.completion_tokens     || 0).toLocaleString();
+              g("tt").textContent  = (u.total_tokens          || 0).toLocaleString();
+              g("tca").textContent = (u.prompt_cache_hit_tokens || 0).toLocaleString();
+              g("tbar").className  = "tbar on";
+              if (u.daily) updateUsage(u.daily);
+            } else if (d.type === "error") {
+              showSt("err", "خطأ DeepSeek: " + d.message);
+            }
+          } catch (ex) { /* skip bad JSON */ }
+        }
+        return readChunk();
+      });
+    }
+    return readChunk();
+  })
+  .catch(function(e) {
+    if (e.name !== "AbortError") {
+      showSt("err", "خطأ: " + e.message);
+      if (!answered) { var ac = g("ansCard"); if (ac) ac.remove(); }
+    }
+    abortCtrl = null;
+    setLoad(false);
+  });
+}
+
+// ── Render result cards ───────────────────────────────
+function renderResults(results, sm, container) {
+  if (!results || !results.length) {
+    container.innerHTML =
+      "<div class='empty'><div class='empty-ico'>🔍</div>" +
+      "<div>لم يُعثر على نتائج</div></div>";
+    return;
+  }
+
+  container.innerHTML =
+    "<div class='res-hdr'>" +
+      "<div class='res-ttl'>📚 المصادر</div>" +
+      "<div class='res-cnt'>" + results.length + " نتيجة</div>" +
+      "<div class='res-time'>" + sm + "</div>" +
+    "</div>";
+
+  for (var i = 0; i < results.length; i++) {
+    (function(r, idx) {
+      var card = document.createElement("div");
+      card.className = "rcard type-" + r.type;
+      card.style.animationDelay = (idx * 50) + "ms";
+
+      var sc = r.score >= 0.6 ? "var(--teal)" : r.score >= 0.4 ? "var(--gold)" : "var(--muted)";
+
+      var kwHTML = "";
+      if (r.keywords && r.keywords.length) {
+        var kwArr = r.keywords.slice(0, 5);
+        for (var k = 0; k < kwArr.length; k++) {
+          kwHTML += "<span class='kw'>" + esc(kwArr[k]) + "</span>";
+        }
+        kwHTML = "<div class='rkw'>" + kwHTML + "</div>";
+      }
+
+      var hasMore = r.content && r.content.length > 180;
+      var expandBtn = hasMore
+        ? "<button class='expbtn' id='eb" + idx + "'>عرض المزيد ▾</button>"
+        : "";
+
+      card.innerHTML =
+        "<div class='rtop'>" +
+          "<div class='rtitle'>" + esc(r.title || "--") + "</div>" +
+          "<div class='rscore' style='color:" + sc + ";border:1px solid " + sc + "33;background:" + sc + "11'>" +
+            r.score +
+          "</div>" +
+        "</div>" +
+        "<div class='rbadges'>" +
+          "<span class='badge bt-" + r.type + "'>" + (TL[r.type] || r.type) + "</span>" +
+          (r.chapter ? "<span class='badge bt-chapter'>" + esc(r.chapter) + "</span>" : "") +
+        "</div>" +
+        "<div class='rcontent' id='rc" + idx + "'>" +
+          esc(r.content || "").replace(/\n/g, "<br>") +
+        "</div>" +
+        expandBtn +
+        kwHTML;
+
+      container.appendChild(card);
+
+      if (hasMore) {
+        (function(i2) {
+          g("eb" + i2).addEventListener("click", function() { toggleExp(i2); });
+        })(idx);
+      }
+      // render math in result content
+      setTimeout(function() { renderMath(card); }, 200);
+    })(results[i], i);
+  }
+}
+</script>
+</body>
+</html>
